@@ -18,6 +18,8 @@ jobs:
             
             - name: Setup terraform
               uses: actions/setup-terraform@v3
+              with:
+                terraform_version: 1.7.0
 
             - name: Create dev and prod workspaces
               run: |
