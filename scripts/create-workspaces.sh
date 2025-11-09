@@ -1,9 +1,8 @@
 #!/bin/bash
 cd "$(dirname "$0")/../terraform"
-echo "initialising terrafrom"
-terraform init -input=false -backend-config="bucket=${bucket}" -backend-config="key=${TF_WORKSPACE}/terraform.tfstate"
 
 for ws in dev prod; do
+    terraform init -input=false -backend-config="bucket=${bucket}" -backend-config="key=${ws}/terraform.tfstate"
     if terraform workspace list | grep -qE "\\b${ws}\\b"; then
         terraform workspace select "$ws"
     else
