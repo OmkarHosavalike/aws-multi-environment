@@ -1,5 +1,6 @@
 #!/bin/bash
 cd "$(dirname "$0")/../terraform"
+echo "initialising terrafrom"
 terraform init -input=false -backend-config="bucket=${bucket}" -backend-config="key=${TF_WORKSPACE}/terraform.tfstate"
 
 for ws in dev prod; do
