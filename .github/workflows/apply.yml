@@ -8,12 +8,12 @@ permissions:
 
 env:
   environment: ${{ vars.ENVIRONMENT }}
+  bucket: ${{ secrets.BACKEND_S3_BUCKET}}
+
 
 jobs:
     terraform_apply:
         runs-on: ubuntu-latest
-        env: 
-            bucket: ${{ secrets.BACKEND_S3_BUCKET}}
         steps:
             - name: Checkout the code
               uses: actions/checkout@v4
@@ -30,4 +30,6 @@ jobs:
                 terraform_version: 1.7.0
 
             - name: Terraform apply
-              run: ./scripts/apply.sh $environment
+              run: |
+                chmod +x scripts/*.sh  
+                ./scripts/apply.sh $environment
