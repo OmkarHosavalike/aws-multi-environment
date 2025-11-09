@@ -36,4 +36,3 @@ pwd
 date
 ls -l
 date
-cat ansible/prod-inventory.ini
