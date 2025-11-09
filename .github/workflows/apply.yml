@@ -1,0 +1,25 @@
+name: Terraform action to deploy resources
+on:
+    workflow_dispatch:
+jobs:
+    create_workspace:
+        runs-on: ubuntu-latest
+        env: 
+            bucket: ${{ secrets.BACKEND_S3_BUCKET}}
+        steps:
+            - name: Checkout the code
+              uses: actions/checkout@v4
+            
+            - name: Configure AWS
+              uses: aws-actions/configure-aws-credentials@v5
+              with:
+                role-to-assume: ${{ secrets.OIDC_IAM_ROLE }}
+                region: us-east-1
+            
+            - name: Setup terraform
+              uses: actions/setup-terraform@v4
+
+            - name: Create dev and prod workspaces
+              run: |
+                chmod +x scripts/*.sh
+                ./scripts/create-workspaces.sh 
