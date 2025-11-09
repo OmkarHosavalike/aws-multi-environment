@@ -12,8 +12,9 @@ TF_OUTPUT=$(terraform output -json)
 
 IPS=$(echo "$TF_OUTPUT" | jq -r '.ec2_public_ips.value[]')
 ENV=$(echo "$TF_OUTPUT" | jq -r '.environment.value')
-
 PRIVATE_KEY=$(echo "$TF_OUTPUT" | jq -r '.key_pair_private_key.value' | sed '/^$/d')
+
+cd $AN_DIR
 KEY_FILE="$ENV-demo-key.pem"
 echo "$PRIVATE_KEY" > "$KEY_FILE"
 chmod 600 "$KEY_FILE"
@@ -30,4 +31,9 @@ echo "[all:vars]" >> "$INVENTORY_FILE"
 echo "environment=$ENV" >> "$INVENTORY_FILE"
 
 echo "Inventory generated: $INVENTORY_FILE"
-cat $INVENTORY_FILE
+
+pwd
+date
+ls -l
+date
+cat ansible/prod-inventory.ini
