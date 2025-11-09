@@ -84,4 +84,5 @@ jobs:
             - name: Run the playbook
               env:
                 ANSIBLE_HOST_KEY_CHECKING: False
-              run: ansible-playbook ansible/site.yml -i ansible/${environ}-inventory.ini
+              run: ansible-playbook site.yml -i ${environ}-inventory.ini
+              working-directory: ansible

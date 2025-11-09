@@ -4,7 +4,7 @@ TF_DIR="terraform/"
 AN_DIR="../ansible/"
 
 cd $TF_DIR
-terraform workspace select $environ
+#terraform workspace select $environ
 
 TF_OUTPUT=$(terraform output -json)
 
