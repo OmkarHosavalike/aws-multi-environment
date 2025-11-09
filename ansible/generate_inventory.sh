@@ -9,11 +9,17 @@ TF_OUTPUT=$(terraform output -json)
 cd $AN_DIR
 IPS=$(echo "$TF_OUTPUT" | jq -r '.ec2_public_ips.value[]')
 ENV=$(echo "$TF_OUTPUT" | jq -r '.environment.value')
+
+PRIVATE_KEY=$(echo "$TF_OUTPUT" | jq -r '.key_pair_private_key.value' | sed '/^$/d')
+KEY_FILE="$ENV-demo-key.pem"
+echo "$PRIVATE_KEY" > "$KEY_FILE"
+chmod 600 "$KEY_FILE"
+
 INVENTORY_FILE="$ENV-inventory.ini"
 
 echo "[web]" > "$INVENTORY_FILE"
 for ip in $IPS; do
-    echo "$ip ansible_user=ec2-user ansible_ssh_private_key_file=../keys/$ENV-demo-key.pem" >> "$INVENTORY_FILE"
+    echo "$ip ansible_user=ec2-user ansible_ssh_private_key_file=$KEY_FILE" >> "$INVENTORY_FILE"
 done
 
 echo "" >> "$INVENTORY_FILE"

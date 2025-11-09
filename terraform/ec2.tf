@@ -49,12 +49,6 @@ resource "aws_key_pair" "web_key_pair" {
   }
 }
 
-resource "local_file" "private_key_pem" {
-  content = tls_private_key.web_key.private_key_pem
-  filename = "${path.module}/../keys/${local.name_prefix}-key.pem"
-  file_permission = "0600"
-}
-
 resource "aws_instance" "web" {
   ami = data.aws_ami.amazon_linux.id
   instance_type = var.instance_type
