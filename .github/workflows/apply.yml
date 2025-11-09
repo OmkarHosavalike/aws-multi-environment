@@ -7,7 +7,7 @@ permissions:
     contents: read
 
 env:
-  environment: ${{ vars.ENVIRONMENT }}
+  environ: ${{ vars.ENVIRONMENT }}
   bucket: ${{ secrets.BACKEND_S3_BUCKET}}
 
 jobs:
@@ -38,7 +38,7 @@ jobs:
             - name: Terraform apply
               run: |
                 chmod +x scripts/*.sh  
-                ./scripts/apply.sh $environment
+                ./scripts/apply.sh $environ
 
     ansible_configure:
         runs-on: ubuntu-latest
@@ -65,6 +65,13 @@ jobs:
                   -backend-config="key=terraform.tfstate"
               working-directory: terraform
             
+            - name: Update ssh rule to allow current runner IP
+              run: |
+                terraform workspace select $environ
+                terraform apply -auto-approve -target=aws_vpc_security_group_ingress_rule.allowSSH
+              working-directory: terraform
+
+
             - name: Install ansible
               run: |
                 sudo apt-get update -y
@@ -77,4 +84,4 @@ jobs:
             - name: Run the playbook
               env:
                 ANSIBLE_HOST_KEY_CHECKING: False
-              run: ansible-playbook ansible/site.yml -i ansible/${environment}-inventory.ini
+              run: ansible-playbook ansible/site.yml -i ansible/${environ}-inventory.ini

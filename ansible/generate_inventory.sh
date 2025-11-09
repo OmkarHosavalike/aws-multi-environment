@@ -4,9 +4,7 @@ TF_DIR="terraform/"
 AN_DIR="../ansible/"
 
 cd $TF_DIR
-terraform workspace select $environment
-
-terraform init -input=false -no-color -backend-config="bucket=${bucket}" -backend-config="key=terraform.tfstate"
+terraform workspace select $environ
 
 TF_OUTPUT=$(terraform output -json)
 
@@ -31,8 +29,3 @@ echo "[all:vars]" >> "$INVENTORY_FILE"
 echo "environment=$ENV" >> "$INVENTORY_FILE"
 
 echo "Inventory generated: $INVENTORY_FILE"
-
-pwd
-date
-ls -l
-date
