@@ -40,3 +40,41 @@ jobs:
               run: |
                 chmod +x scripts/*.sh  
                 ./scripts/apply.sh $environment
+
+    ansible_configre:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout the code
+              uses: actions/checkout@v4
+            
+            - name: Configure AWS
+              uses: aws-actions/configure-aws-credentials@v5
+              with:
+                role-to-assume: ${{ secrets.OIDC_IAM_ROLE }}
+                aws-region: us-east-1
+            
+            - name: Setup terraform
+              uses: hashicorp/setup-terraform@v3
+              with:
+                terraform_version: 1.7.0
+
+            - name: Initialize terraform
+              run: |
+                terraform init -input=false -no-color \
+                  -backend-config="bucket=${bucket}" \
+                  -backend-config="key=terraform.tfstate"
+              working-directory: terraform
+            
+            - name: Install ansible
+              run: |
+                sudo apt-get update -y
+                sudo apt-get install ansible -y
+                chmod +x ansible/*.sh
+
+            - name: Generate inventory file
+              run: ansible/generate_inventory.sh
+
+            - name: Run the playbook
+              env:
+                ANSIBLE_HOST_KEY_CHECKING: False
+              run: ansible-playbook ansible/site.yml -i ansible/${environment}-inventory.ini

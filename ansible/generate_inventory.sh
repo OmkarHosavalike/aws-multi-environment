@@ -1,7 +1,7 @@
 #!/bin/bash
 
-TF_DIR="../terraform"
-AN_DIR="../ansible"
+TF_DIR="terraform/"
+AN_DIR="ansible/"
 
 cd $TF_DIR
 TF_OUTPUT=$(terraform output -json)
@@ -25,7 +25,5 @@ done
 echo "" >> "$INVENTORY_FILE"
 echo "[all:vars]" >> "$INVENTORY_FILE"
 echo "environment=$ENV" >> "$INVENTORY_FILE"
-
-export ANSIBLE_HOST_KEY_CHECKING=false
 
 echo "Inventory generated: $INVENTORY_FILE"
