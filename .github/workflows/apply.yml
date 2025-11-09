@@ -43,6 +43,7 @@ jobs:
 
     ansible_configre:
         runs-on: ubuntu-latest
+        needs: terraform_apply
         steps:
             - name: Checkout the code
               uses: actions/checkout@v4
