@@ -1,12 +1,16 @@
-name: Terraform action to deploy resources
+name: Create resources
 on:
     workflow_dispatch:
 
 permissions:
     id-token: write
     contents: read
+
+env:
+  environment: ${{ vars.ENVIRONMENT }}
+
 jobs:
-    create_workspace:
+    terraform_apply:
         runs-on: ubuntu-latest
         env: 
             bucket: ${{ secrets.BACKEND_S3_BUCKET}}
@@ -25,7 +29,5 @@ jobs:
               with:
                 terraform_version: 1.7.0
 
-            - name: Create dev and prod workspaces
-              run: |
-                chmod +x scripts/*.sh
-                ./scripts/create-workspaces.sh 
+            - name: Terraform apply
+              run: ./scripts/apply.sh $environment
