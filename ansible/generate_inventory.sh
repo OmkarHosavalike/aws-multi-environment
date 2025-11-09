@@ -1,7 +1,7 @@
 #!/bin/bash
 
 TF_DIR="terraform/"
-AN_DIR="ansible/"
+AN_DIR="../ansible/"
 
 cd $TF_DIR
 TF_OUTPUT=$(terraform output -json)
