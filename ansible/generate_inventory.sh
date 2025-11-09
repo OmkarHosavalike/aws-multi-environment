@@ -4,6 +4,7 @@ TF_DIR="terraform/"
 AN_DIR="../ansible/"
 
 cd $TF_DIR
+echo "bucket- ${bucket}"
 terraform init -input=false -no-color -backend-config="bucket=${bucket}" -backend-config="key=terraform.tfstate"
 
 TF_OUTPUT=$(terraform output -json)
