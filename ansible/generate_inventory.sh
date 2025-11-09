@@ -5,12 +5,8 @@ AN_DIR="../ansible/"
 
 cd $TF_DIR
 TF_OUTPUT=$(terraform output -json)
-echo "terraform output ran"
-pwd
-ls 
-date
-ls ../
-cd $AN_DIR
+echo "output- $TF_OUTPUT"
+
 IPS=$(echo "$TF_OUTPUT" | jq -r '.ec2_public_ips.value[]')
 ENV=$(echo "$TF_OUTPUT" | jq -r '.environment.value')
 
