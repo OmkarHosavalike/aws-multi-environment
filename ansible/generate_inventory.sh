@@ -4,15 +4,11 @@ TF_DIR="terraform/"
 AN_DIR="../ansible/"
 
 cd $TF_DIR
-echo "env: $environment"
 terraform workspace select $environment
-echo "bucket- ${bucket}"
+
 terraform init -input=false -no-color -backend-config="bucket=${bucket}" -backend-config="key=terraform.tfstate"
 
 TF_OUTPUT=$(terraform output -json)
-echo "Before"
-terraform output -json
-echo "output- $TF_OUTPUT"
 
 IPS=$(echo "$TF_OUTPUT" | jq -r '.ec2_public_ips.value[]')
 ENV=$(echo "$TF_OUTPUT" | jq -r '.environment.value')
@@ -34,3 +30,4 @@ echo "[all:vars]" >> "$INVENTORY_FILE"
 echo "environment=$ENV" >> "$INVENTORY_FILE"
 
 echo "Inventory generated: $INVENTORY_FILE"
+cat $INVENTORY_FILE
