@@ -1,0 +1,41 @@
+name: Destroy the AWS resources
+on:
+    workflow_dispatch:
+
+permissions:
+    id-token: write
+    contents: read
+
+env:
+    bucket: ${{ secrets.BACKEND_S3_BUCKET }}
+    environ: ${{ vars.ENVIRONMENT }}
+jobs:
+    terraform_destroy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout the code
+              uses: actions/checkout@v4
+
+            - name: Setup AWS credentials
+              uses: aws-actions/configure-credentials@v5
+              with:
+                role-to-assume: ${{ secrets.OIDC_IAM_ROLE }}
+                aws-region: us-east-1
+            
+            - name: Setup terraform
+              uses: hashicorp/setup-terraform@v3
+              with:
+                terraform-version: 1.7.0
+            
+            - name: Initialize terraform
+              run: |
+                terraform init -input=false -no-color \
+                  -backend-config="bucket=${bucket}" \
+                  -backend-config="key=terraform.tfstate"
+              working-directory: terraform
+
+            - name: Destroy resources
+              run: |
+                terraform workspace select $environ
+                terraform destroy -var-file="${environ}.tfvars" -auto-approve 
+              working-directory: terraform
