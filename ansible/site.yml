@@ -21,10 +21,10 @@
         content: |
           <html>
           <head>
-          <title> {{ hostvars[inventory_hostname]['environment'] | capitalize}} environment </title>
+          <title> {{ hostvars[inventory_hostname]['proj_environment'] | capitalize}} environment </title>
           <style>
           body{
-            background-color: {{ 'green' if hostvars[inventory_hostname]['environment'] == 'prod' else 'blue' }};
+            background-color: {{ 'green' if hostvars[inventory_hostname]['proj_environment'] == 'prod' else 'blue' }};
             color: white;
             text-align: center;
             margin-top: 20%;
@@ -34,7 +34,7 @@
           </style>
           </head>
           <body>
-            <h1>Welcome to {{ hostvars[inventory_hostname]['environment'] | capitalize}} web servers</h1>
-            <p>This server is part of {{ hostvars[inventory_hostname]['environment'] }} deployment</p>
+            <h1>Welcome to {{ hostvars[inventory_hostname]['proj_environment'] | capitalize}} web servers</h1>
+            <p>This server is part of {{ hostvars[inventory_hostname]['proj_environment'] }} deployment</p>
           </body>  
           </html>

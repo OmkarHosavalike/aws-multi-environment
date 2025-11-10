@@ -26,6 +26,6 @@ done
 
 echo "" >> "$INVENTORY_FILE"
 echo "[all:vars]" >> "$INVENTORY_FILE"
-echo "environment=$ENV" >> "$INVENTORY_FILE"
+echo "proj_environment=$ENV" >> "$INVENTORY_FILE"
 
 echo "Inventory generated: $INVENTORY_FILE"
